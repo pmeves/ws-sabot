@@ -19,3 +19,8 @@ https://www.lua.org/manual/5.1/
 # Changes to WoW Classic lua files
 https://www.townlong-yak.com/framexml/live
 
+# GIT Useful terminal commands
+git pull
+git add *
+git commit -m "MyMessage"
+git push
