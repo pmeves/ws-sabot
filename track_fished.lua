@@ -3,8 +3,8 @@
 local ItemPushedFrame = CreateFrame("Frame")
 
 local function LogLoot(bagSlot, iconFileID)
-    local item = iconFileID:GetItem()
-    local itemName = GetItemInfo(item)
+    local _,_,_,_,_,_,_,_,_,itemID = GetContainerItemInfo(bagSlot, iconFileID)
+    local itemID = GetItemInfo(item)
     SendChatMessage("Jai trouvé un " .. itemName ,"GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
 end
 
