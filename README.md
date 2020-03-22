@@ -19,6 +19,9 @@ https://www.lua.org/manual/5.1/
 # Changes to WoW Classic lua files
 https://www.townlong-yak.com/framexml/live
 
+# WoW Interface Customization
+https://wowwiki.fandom.com/wiki/Portal:Interface_customization
+
 # GIT Useful terminal commands
 git pull
 git add *
