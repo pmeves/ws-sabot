@@ -3,8 +3,8 @@
 local ItemPushedFrame = CreateFrame("Frame")
 
 local function LogLoot(bagSlot, iconFileID)
-    local _,_,_,_,_,_,_,_,_,itemID = GetContainerItemInfo(bagSlot, iconFileID)
-    local itemID = GetItemInfo(item)
+    local texture, itemCount, locked, quality, readable, lootable, itemLink = GetContainerItemInfo(bagSlot, iconFileID)
+    local itemName = GetItemInfo(itemLink)
     SendChatMessage("Jai trouvé un " .. itemName ,"GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
 end
 
