@@ -1,4 +1,4 @@
-# Track_Fished is meant to register events of anything that is Fished and log its info
+--Track_Fished is meant to register events of anything that is Fished and log its info
 
 local ItemPushedFrame = CreateFrame("Frame")
 
