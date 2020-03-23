@@ -1,35 +1,49 @@
 --Track_Fished is meant to register events of anything that is Fished and log its info
 
-local ItemPushedFrame = CreateFrame("Frame")
-local peche = {}
-local function LogLoot()
-    if( IsFishingLoot() ) then
-        local itemLink = GetLootSlotLink(1)
-        local _, _, Color, Ltype, itemId, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix, Unique, LinkLvl, Name = string.find(itemLink, 
-        "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
-        local itemName = GetItemInfo(itemId)
-        local fish = peche[itemId]
+local TrackFishedFrame = CreateFrame("Frame")
 
-        if fish == nil then
-            fish = {}
-            fish.Id = itemId
-            fish.ItemLink = itemLink
-            fish.ItemName = itemName
-            fish.TotalFishedCount = 1
-            fish.FirstFishedDate = date()
-            fish.LastFishedDate = date()
-            peche[itemId] = fish
-        else 
-            fish.TotalFishedCount = fish.TotalFishedCount + 1
-            fish.LastFishedDate = date()
-            peche[itemId] = fish
+local function WSFished(self, event)
+
+    if (event == "LOOT_OPENED" ) then
+
+        if( IsFishingLoot() ) then
+
+            local itemLink = GetLootSlotLink(1)
+            local _, _, Color, Ltype, itemId, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix, Unique, LinkLvl, Name = string.find(itemLink, 
+            "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
+            local itemName = GetItemInfo(itemId)
+            item = WSabotDB.Museum[itemId]
+            if item == nil then
+                item = {}
+                item.Id = itemId
+                item.ItemLink = itemLink
+                item.ItemName = itemName
+                item.TotalCount = 1
+                item.SessionCount = 1
+                item.FirstFishedDate = date()
+                item.LastFishedDate = date()
+                WSabotDB.Museum[itemId] = item            
+                
+                SendChatMessage("Jai trouvé un " .. item.ItemName .." pour la premiere fois!","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
+
+            else 
+                item.TotalCount = item.TotalCount + 1
+                item.SessionCount = 1 --TODO Detect session to increment
+                item.LastFishedDate = date()
+                WSabotDB.Museum[itemId] = item
+
+                SendChatMessage("Encore pêché un " .. item.ItemName ..". Ca m'en fait "..item.TotalCount..".","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
+
+            end
+
+            WSabotDB.Player.LastActivityDateTS = date("!%c") --to use for session
+
         end
 
-        SendChatMessage("Jai trouvé un " .. fish.ItemName .." c'est le "..fish.TotalFishedCount .." de la journée!","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
-        SendChatMessage("La premiere fois que jai trouvé ce poisson cetait en " .. tostring(fish.FirstFishedDate),"GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
-
     end
+
 end
 
-ItemPushedFrame:SetScript("OnEvent", LogLoot)
-ItemPushedFrame:RegisterEvent("LOOT_OPENED")
+
+TrackFishedFrame:SetScript("OnEvent", WSFished)
+TrackFishedFrame:RegisterEvent("LOOT_OPENED")
