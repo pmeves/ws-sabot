@@ -7,7 +7,7 @@ local function LogLoot()
         local itemLink = GetLootSlotLink(1)
         local itemName = GetItemInfo(itemLink)
         local fish = peche[itemLink] 
-        if fish = nil then
+        if fish == nil then
             peche[itemLink] = 1
         else 
             fish = fish + 1
