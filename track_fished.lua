@@ -5,24 +5,27 @@ local peche = {}
 local function LogLoot()
     if( IsFishingLoot() ) then
         local itemLink = GetLootSlotLink(1)
-        local itemName = GetItemInfo(itemLink)
-        local fish = peche[itemLink]
+        local _, _, Color, Ltype, itemId, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix, Unique, LinkLvl, Name = string.find(itemLink, 
+        "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
+        local itemName = GetItemInfo(itemId)
+        local fish = peche[itemId]
 
         if fish == nil then
             fish = {}
+            fish.Id = itemId
             fish.ItemLink = itemLink
             fish.ItemName = itemName
             fish.TotalFishedCount = 1
             fish.FirstFishedDate = date()
             fish.LastFishedDate = date()
-            peche[itemLink] = fish
+            peche[itemId] = fish
         else 
             fish.TotalFishedCount = fish.TotalFishedCount + 1
             fish.LastFishedDate = date()
-            peche[itemLink] = fish
+            peche[itemId] = fish
         end
 
-        SendChatMessage("Jai trouvé un " .. itemName .." c'est le "..fish.TotalFishedCount .." de la journée!","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
+        SendChatMessage("Jai trouvé un " .. fish.ItemName .." c'est le "..fish.TotalFishedCount .." de la journée!","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
         SendChatMessage("La premiere fois que jai trouvé ce poisson cetait en " .. tostring(fish.FirstFishedDate),"GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
 
     end
