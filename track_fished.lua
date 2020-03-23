@@ -2,11 +2,13 @@
 
 local ItemPushedFrame = CreateFrame("Frame")
 
-local function LogLoot(bagSlot, iconFileID)
-    local texture, itemCount, locked, quality, readable, lootable, itemLink = GetContainerItemInfo(bagSlot, iconFileID)
-    local itemName = GetItemInfo(itemLink)
-    SendChatMessage("Jai trouvé un " .. itemName ,"GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
+local function LogLoot()
+    if( IsFishingLoot() ) then
+        local itemLink = GetLootSlotLink(1)
+        local itemName = GetItemInfo(itemLink)
+        SendChatMessage("Jai trouvé un " .. itemName ,"GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID);
+     end
 end
 
 ItemPushedFrame:SetScript("OnEvent", LogLoot)
-ItemPushedFrame:RegisterEvent("ITEM_PUSH")
+ItemPushedFrame:RegisterEvent("LOOT_OPENED")

@@ -22,10 +22,9 @@ https://www.townlong-yak.com/framexml/live
 # WoW Interface Customization
 https://wowwiki.fandom.com/wiki/Portal:Interface_customization
 # ALL EVENTS
-https://wow.gamepedia.com/Events
-https://wow.gamepedia.com/Category:API_events
-# Items
-https://wow.gamepedia.com/Category:API_events/Item
+https://wowwiki.fandom.com/wiki/Event_API
+## Global API
+https://wowwiki.fandom.com/wiki/World_of_Warcraft_API
 
 # GIT Useful terminal commands
 git pull
