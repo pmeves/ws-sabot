@@ -1,7 +1,9 @@
 ## Interface : 11304
-## Title : Sabot
+## Title : ws-sabot
 ## Author : Pmevash
 ## Notes : Un addon pour les pgm
 ## Verion : 0.1
+## SavedVariables: WSabotDB
 
+ws_sabot_db.lua
 track_fished.lua
