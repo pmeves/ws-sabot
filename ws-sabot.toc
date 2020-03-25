@@ -7,3 +7,4 @@
 
 ws_sabot_db.lua
 track_fished.lua
+slash_command.lua
