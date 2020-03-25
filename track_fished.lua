@@ -1,10 +1,4 @@
 --Track_Fished is meant to register events of anything that is Fished and log its info
-SLASH_SABOT1 = '/sabot'; 
-function macommande(msg, editbox)
-        SendChatMessage("on fait un addon de ouf !", "WHISPER", DEFAULT_CHAT_FRAME.editBox.languageID, msg)
-end
-SlashCmdList.SABOT = macommande
-
 local TrackFishedFrame = CreateFrame("Frame")
 local function WSFished(self, event)
 
