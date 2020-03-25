@@ -12,11 +12,14 @@ local function WSFished(self, event)
 
         if( IsFishingLoot() ) then
 
+            --IMPORTANT ITEM INFO
             local itemLink = GetLootSlotLink(1)
             local _, _, Color, Ltype, itemId, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix, Unique, LinkLvl, Name = string.find(itemLink, 
             "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
             local itemName = GetItemInfo(itemId)
             item = WSabotDB.Museum[itemId]
+
+            --STORE IN MUSEUM
             if item == nil then
                 item = {}
                 item.Id = itemId
@@ -26,7 +29,8 @@ local function WSFished(self, event)
                 item.SessionCount = 1
                 item.FirstFishedDate = date()
                 item.LastFishedDate = date()
-                WSabotDB.Museum[itemId] = item            
+                item.FishingSkill = 0 --GetPlayerCurrentSkillValue(356)
+                WSabotDB.Museum[itemId] = item
                 
                 SendChatMessage("Jai trouvé un " .. item.ItemName .." pour la premiere fois!","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID)
 
@@ -38,7 +42,46 @@ local function WSFished(self, event)
                 SendChatMessage("Encore pêché un " .. item.ItemName ..". Ca m'en fait "..item.TotalCount..".","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID)
             end
 
-            WSabotDB.Player.LastActivityDateTS = date("!%c") --to use for session
+            --STORE IN SESSIONS
+
+            local curr_utc = time()
+            local lastActivity = WSabotDB.Player.LastActivityTime
+            local is_new_session = true
+            local session_id = WSabotDB.Player.SessionID
+            local position = GetCurrentPosition("unit")
+            local fishing_zone = "Home"
+
+            --GetMinimapZoneText() - Returns the zone text, that is displayed over the minimap.
+            --GetRealZoneText() - Returns either instance name or zone name
+            --GetSubZoneText() - Returns the subzone text, e.g. "The Canals".
+            --GetZonePVPInfo() - Returns PVP info for the current zone.
+            --GetZoneText() - Returns the zone text, e.g. "Stormwind City".
+
+            if( lastActivity ~= nil ) then -- Returning player
+                if( tonumber(curr_utc) - tonumber(lastActivity) < WSabotDB.Config.SessionTimeoutInSeconds ) then
+                    is_new_session = false
+                    print("WS-SABOT: This is not a new session")
+                end
+            else
+                print("WS-SABOT: This is a first! Here, have a session...")
+            end
+
+            local session_item = { ItemId = item.Id, Position = position, Zone = GetRealZoneText(), SubZone = GetSubZoneText() }
+
+
+            if( is_new_session ) then
+                session_id = session_id + 1
+                WSabotDB.Player.SessionID = session_id
+                WSabotDB.Sessions[session_id] = {}
+                print("WS-SABOT: Started new session.")
+            end
+
+            WSabotDB.Sessions[session_id][itemId] = WSabotDB.Sessions[session_id][itemId] or {}
+
+            print("WS-SABOT: trying to store session in "..session_id .." for item id ".. itemId)
+            table.insert( WSabotDB.Sessions[session_id][itemId], session_item )
+
+            WSabotDB.Player.LastActivityTime = time() --to use for session
 
         end
 
