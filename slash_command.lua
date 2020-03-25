@@ -1,6 +1,4 @@
--- table pour trouver les lignes des skills "GetSkillLineInfo" , trouver la ligne pour la peche, 
--- additionner les compétences de peches GetSkillLineInfo(skillIndex) [skillName, _ , _ , skillRank, _ , skillModifier,
--- _ , _ ,  _ ,  _ ,  _ , _ , _ ]
+
 function GetFishingSkill()
 local FishSkill = -1
 local numSkills = GetNumSkillLines();
