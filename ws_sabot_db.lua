@@ -4,10 +4,15 @@ local function CreateWSabotDB()
     print("You must be new to ws-sabot... Welcome.")
     WSabotDB = {
         Config = {
-            SessionTimeoutInMiliseconds = 300000
+            SessionTimeoutInSeconds = 300
         },
-        Player = {},
-        Museum = {}
+        Player = {
+            Name = UnitName("player"),
+            SessionID = 0, --Did not start fishing yet, he's new...
+            LastActivityTime = nil
+        },
+        Museum = {},
+        Sessions = {}
     }
     print("WSabotDB was created to track your fishing activities, have fun now!")
     return WSabotDB
