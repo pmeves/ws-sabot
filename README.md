@@ -26,8 +26,12 @@ https://wowwiki.fandom.com/wiki/Event_API
 ## Global API
 https://wowwiki.fandom.com/wiki/World_of_Warcraft_API
 
+# All Global Strings (language critical) 
+https://wow.tools/dbc/?dbc=globalstrings&build=1.13.4.33491&locale=frFR#search=&page=1
+
 # GIT Useful terminal commands
 git pull
 git add *
 git commit -m "MyMessage"
 git push
+
