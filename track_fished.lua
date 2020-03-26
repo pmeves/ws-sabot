@@ -41,8 +41,8 @@ local function WSFished(self, event)
             local curr_utc = time()
             local lastActivity = WSabotDB.Player.LastActivityTime
             local is_new_session = true
-            local session_id = WSabotDB.Player.SessionID
-            local position = GetCurrentPosition("player")
+            local session_id = WSabotDB.Player.SessionID or 0
+            local position = UnitPosition("player");
             local fishing_zone = "Home"
 
             --GetMinimapZoneText() - Returns the zone text, that is displayed over the minimap.
