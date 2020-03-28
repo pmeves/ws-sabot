@@ -26,14 +26,14 @@ local function WSFished(self, event)
                 item.FishingSkill = 0 --GetPlayerCurrentSkillValue(356)
                 WSabotDB.Museum[itemId] = item
                 
-                SendChatMessage("Jai trouvé un " .. item.ItemName .." pour la premiere fois!","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID)
+                print("Jai trouvé un " .. item.ItemName .." pour la premiere fois!")
 
             else 
                 item.TotalCount = item.TotalCount + 1
                 item.SessionCount = 1 --TODO Detect session to increment
                 item.LastFishedDate = date()
                 WSabotDB.Museum[itemId] = item
-                SendChatMessage("Encore pêché un " .. item.ItemName ..". Ca m'en fait "..item.TotalCount..".","GUILD" , DEFAULT_CHAT_FRAME.editBox.languageID)
+                print("Encore un " .. item.ItemName ..". Ca m'en fait "..item.TotalCount..".")
             end
 
             --STORE IN SESSIONS
@@ -54,10 +54,7 @@ local function WSFished(self, event)
             if( lastActivity ~= nil ) then -- Returning player
                 if( tonumber(curr_utc) - tonumber(lastActivity) < WSabotDB.Config.SessionTimeoutInSeconds ) then
                     is_new_session = false
-                    print("WS-SABOT: This is not a new session")
                 end
-            else
-                print("WS-SABOT: This is a first! Here, have a session...")
             end
 
             local session_item = { ItemId = item.Id, Position = position, Zone = GetRealZoneText(), SubZone = GetSubZoneText() }
@@ -67,12 +64,10 @@ local function WSFished(self, event)
                 session_id = session_id + 1
                 WSabotDB.Player.SessionID = session_id
                 WSabotDB.Sessions[session_id] = {}
-                print("WS-SABOT: Started new session.")
             end
 
             WSabotDB.Sessions[session_id][itemId] = WSabotDB.Sessions[session_id][itemId] or {}
 
-            print("WS-SABOT: trying to store session in "..session_id .." for item id ".. itemId)
             table.insert( WSabotDB.Sessions[session_id][itemId], session_item )
 
             WSabotDB.Player.LastActivityTime = time() --to use for session
