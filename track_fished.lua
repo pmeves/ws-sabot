@@ -11,6 +11,9 @@ local function WSFished(self, event)
             local _, _, Color, Ltype, itemId, Enchant, Gem1, Gem2, Gem3, Gem4, Suffix, Unique, LinkLvl, Name = string.find(itemLink, 
             "|?c?f?f?(%x*)|?H?([^:]*):?(%d+):?(%d*):?(%d*):?(%d*):?(%d*):?(%d*):?(%-?%d*):?(%-?%d*):?(%d*):?(%d*):?(%-?%d*)|?h?%[?([^%[%]]*)%]?|?h?|?r?")
             local itemName = GetItemInfo(itemId)
+            local currFishSkill = WSabotGetFishingSkill()
+            local currDate = date()
+
             item = WSabotDB.Museum[itemId]
 
             --STORE IN MUSEUM
@@ -20,47 +23,44 @@ local function WSFished(self, event)
                 item.ItemLink = itemLink
                 item.ItemName = itemName
                 item.TotalCount = 1
-                item.FirstFishedDate = date()
-                item.LastFishedDate = date()
-                item.FishingSkill = 0 --GetPlayerCurrentSkillValue(356)
+                item.FirstFishedDate = currDate
+                item.LastFishedDate = currDate
+                item.MinSkill = currFishSkill
+                item.MaxSkill = currFishSkill
                 WSabotDB.Museum[itemId] = item
                 
                 print("Jai trouvé un " .. item.ItemName .." pour la premiere fois!")
 
             else 
                 item.TotalCount = item.TotalCount + 1
-                item.LastFishedDate = date()
+                item.LastFishedDate = currDate
+                if item.Maxkill == nil or item.Maxkill < currFishSkill then
+                    item.MaxSkill = currFishSkill
+                end
+
                 WSabotDB.Museum[itemId] = item
                 print("Encore un " .. item.ItemName ..". Ca m'en fait "..item.TotalCount..".")
             end
 
-            --STORE IN SESSIONS
-
-            local curr_utc = time()
-            local lastActivity = WSabotDB.Player.LastActivityTime
+            -- //STORE IN SESSIONS
             local is_new_session = true
             local session_id = WSabotDB.Player.SessionID or 0
             local position = UnitPosition("player");
             local fishing_zone = "Home"
 
-            --GetMinimapZoneText() - Returns the zone text, that is displayed over the minimap.
-            --GetRealZoneText() - Returns either instance name or zone name
-            --GetSubZoneText() - Returns the subzone text, e.g. "The Canals".
-            --GetZonePVPInfo() - Returns PVP info for the current zone.
-            --GetZoneText() - Returns the zone text, e.g. "Stormwind City".
+            local session_item = { 
+                ItemId = itemId, 
+                ItemName = itemName,
+                Position = position, 
+                Zone = GetRealZoneText(), 
+                SubZone = GetSubZoneText(),
+                FishSkill = currFishSkill,
+                Time = currDate
+            }
 
-            if( lastActivity ~= nil ) then -- Returning player
-                if( tonumber(curr_utc) - tonumber(lastActivity) < WSabotDB.Config.SessionTimeoutInSeconds ) then
-                    is_new_session = false
-                end
-            end
-
-            local session_item = { ItemId = item.Id, Position = position, Zone = GetRealZoneText(), SubZone = GetSubZoneText() }
-
-
-            if( is_new_session ) then
-                session_id = session_id + 1
-                WSabotDB.Player.SessionID = session_id
+            if( WSabotIsSessionOver() ) then
+                WSabotStartNewSession()
+            elseif( not WSabotDB.Sessions[session_id] ) then
                 WSabotDB.Sessions[session_id] = {}
             end
 

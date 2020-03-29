@@ -1,10 +1,17 @@
 --Track_Fished is meant to register events of anything that is Fished and log its info
 
+
+function ClearWSabotDB()
+    wipe( WSabotDB )
+    WSabotDB = CreateWSabotDB()
+    Print("WS-Sabot: Database clear and reset!")
+end
+
 local function CreateWSabotDB()
     print("You must be new to ws-sabot... Welcome.")
     WSabotDB = {
         Config = {
-            SessionTimeoutInSeconds = 300
+            SessionTimeoutInSeconds = 3600 -- 1 hour default
         },
         Player = {
             Name = UnitName("player"),
@@ -28,5 +35,10 @@ f:SetScript ("OnEvent", function (self, event, addonName)
 	
 		WSabotDB = WSabotDB or CreateWSabotDB()
 	
-	end
+    end
+    
 end)
+
+
+
+
