@@ -20,7 +20,6 @@ local function WSFished(self, event)
                 item.ItemLink = itemLink
                 item.ItemName = itemName
                 item.TotalCount = 1
-                item.SessionCount = 1
                 item.FirstFishedDate = date()
                 item.LastFishedDate = date()
                 item.FishingSkill = 0 --GetPlayerCurrentSkillValue(356)
@@ -30,7 +29,6 @@ local function WSFished(self, event)
 
             else 
                 item.TotalCount = item.TotalCount + 1
-                item.SessionCount = 1 --TODO Detect session to increment
                 item.LastFishedDate = date()
                 WSabotDB.Museum[itemId] = item
                 print("Encore un " .. item.ItemName ..". Ca m'en fait "..item.TotalCount..".")
