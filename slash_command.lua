@@ -13,14 +13,19 @@ return FishSkill
 end
 
 
-SLASH_SABOT1 = '/sabot'; 
-SLASH_SABOTS1 = '/sabottest'; 
-function macommande(msg, editbox)
-            SendChatMessage("on fait un addon de ouf !", "WHISPER", DEFAULT_CHAT_FRAME.editBox.languageID, msg)
+SLASH_SABOT1 = '/sabot'
+local function Sabotcommand(msg, editBox)
+    if (not msg or msg == "" or msg == "help") then
+    print("Bienvenue dans l'aide du meilleur addon possible ;)")    
+    print("Les commandes possible sont :")
+    print("     /sabot session pour afficher les résultats de la dernière session")
+    print("     /sabot museum pour afficher tout ton butin de pèche")
+    elseif (msg == "session") then
+    -- TODO call the DB for session data
+    SendChatMessage(GetUnitName("player")..", Grand Maitre pêcheur, a péché cette dernière session :","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
+    elseif ( msg == "museum") then
+    -- TODO call the DB for overall data
+    SendChatMessage(GetUnitName("player")..", Grand Maitre pêcheur, a péché jusqu'à ce jour :","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
+    end
 end
-function montest(msg, editbox)
-
-end
-
-SlashCmdList.SABOT = macommande
-SlashCmdList.SABOTS = montest
+SlashCmdList["SABOT"] = Sabotcommand
