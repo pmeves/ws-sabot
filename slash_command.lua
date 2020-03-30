@@ -87,7 +87,11 @@ local function ReportSession()
                 SendChatMessage(GetUnitName("player")..", Grand Maitre pêcheur, a péché cette dernière session :","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
             end
             itemCount = itemCount + 1
-            local itemName = fishySession[key].ItemName or GetItemInfo(key) --We started storing ItemName later so we have to get the name again...
+            local itemName = fishySession[key].ItemName
+            if(itemName == nil) then
+                itemName = GetItemInfo(key)
+            end
+            --local itemName = fishySession[key].ItemName or GetItemInfo(key) --We started storing ItemName later so we have to get the name again...
             
             local itemLine = itemCount..". "..itemName
             local lineLength = #itemLine
