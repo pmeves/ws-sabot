@@ -115,17 +115,28 @@ local function ReportMuseum()
     --SendChatMessage("Poueeeette, c'est pas encore implémenté!","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
     local museum = WSabotDB.Museum
     local itemCount = 0
+    local orderMap = {}
 
+    --order museum by Total fish count
+    --table.sort(museum, function(a,b) return a.TotalCount > b.TotalCount end)
+    
+    --Order Mapping
     for key,value in pairs(museum) do 
-        itemCount = itemCount + 1
-        local itemLine = itemCount..". ".. museum[key].ItemName .. " "
+        table.insert(orderMap, { Name = value.ItemName, Count = value.TotalCount })
+    end
+    
+    table.sort(orderMap, function(a,b) return a.Count > b.Count end)
+
+    --Report each museum line
+    for i=1, #orderMap do 
+        local itemLine = i..". ".. orderMap[i].Name .. " "
         local lineLength = #itemLine
         local maxLineLength = 40
         local missingDots = maxLineLength - lineLength
         for i=1, missingDots do
             itemLine = itemLine.."."
         end
-        SendChatMessage(itemLine.." "..museum[key].TotalCount,"GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
+        SendChatMessage(itemLine.." ".. orderMap[i].Count,"GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
     end
 end
 
