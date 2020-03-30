@@ -72,7 +72,7 @@ local function ReportSession()
     local totalFish = 0
     local sessionOver = WSabotIsSessionOver()
 
-    if( fishySession && not sessionOver ) then 
+    if( fishySession and not sessionOver ) then 
         --Determine Total
         for key, value in pairs(fishySession) do
             totalFish = totalFish +  #fishySession[key]
@@ -91,7 +91,7 @@ local function ReportSession()
             --Bug when first called?
             local itemName = fishySession[key][ItemName] or GetItemInfo(key) 
             
-            local itemLine = itemCount..". "..itemName
+            local itemLine = itemCount..". "..itemName .. " "
             local lineLength = #itemLine
             local maxLineLength = 40
             local missingDots = maxLineLength - lineLength
@@ -112,8 +112,21 @@ end
 local function ReportMuseum()
     -- TODO call the DB for overall data
     SendChatMessage(GetUnitName("player")..", Grand Maitre pêcheur, a péché jusqu'à ce jour :","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
-    SendChatMessage("Poueeeette, c'est pas encore implémenté!","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
+    --SendChatMessage("Poueeeette, c'est pas encore implémenté!","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
+    local museum = WSabotDB.Museum
+    local itemCount = 0
 
+    for key,value in pairs(museum) do 
+        itemCount = itemCount + 1
+        local itemLine = itemCount..". ".. museum[key].ItemName .. " "
+        local lineLength = #itemLine
+        local maxLineLength = 40
+        local missingDots = maxLineLength - lineLength
+        for i=1, missingDots do
+            itemLine = itemLine.."."
+        end
+        SendChatMessage(itemLine.." "..museum[key].TotalCount,"GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
+    end
 end
 
 SLASH_SABOT1 = '/sabot'
