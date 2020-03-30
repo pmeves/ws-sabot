@@ -5,10 +5,10 @@
 function WSabotIsSessionOver()
     local curr_utc = time()
     local lastActivity = WSabotDB.Player.LastActivityTime
-    local isOver = false
+    local isOver = true
     if( lastActivity ~= nil ) then -- Returning player
-        if( tonumber(curr_utc) - tonumber(lastActivity) > WSabotDB.Config.SessionTimeoutInSeconds ) then
-            is_new_session = true
+        if( tonumber(curr_utc) - tonumber(lastActivity) < WSabotDB.Config.SessionTimeoutInSeconds ) then
+            is_new_session = false
         end
     end
     return isOver
@@ -72,8 +72,7 @@ local function ReportSession()
     local totalFish = 0
     local sessionOver = WSabotIsSessionOver()
 
-
-    if( fishySession ) then 
+    if( fishySession && not sessionOver ) then 
         --Determine Total
         for key, value in pairs(fishySession) do
             totalFish = totalFish +  #fishySession[key]
@@ -87,11 +86,10 @@ local function ReportSession()
                 SendChatMessage(GetUnitName("player")..", Grand Maitre pêcheur, a péché cette dernière session :","GUILD", DEFAULT_CHAT_FRAME.editBox.languageID);
             end
             itemCount = itemCount + 1
-            local itemName = fishySession[key].ItemName
-            if(itemName == nil) then
-                itemName = GetItemInfo(key)
-            end
-            --local itemName = fishySession[key].ItemName or GetItemInfo(key) --We started storing ItemName later so we have to get the name again...
+
+            --We started storing ItemName later so we have to get the name again...
+            --Bug when first called?
+            local itemName = fishySession[key][ItemName] or GetItemInfo(key) 
             
             local itemLine = itemCount..". "..itemName
             local lineLength = #itemLine
