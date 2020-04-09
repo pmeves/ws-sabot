@@ -8,7 +8,7 @@ function WSabotIsSessionOver()
     local isOver = true
     if( lastActivity ~= nil ) then -- Returning player
         if( tonumber(curr_utc) - tonumber(lastActivity) < WSabotDB.Config.SessionTimeoutInSeconds ) then
-            is_new_session = false
+            isOver = false
         end
     end
     return isOver
